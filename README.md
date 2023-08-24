@@ -14,3 +14,11 @@ Gameplan:
     a. The first will be making sure that I can appropriately authorize my personal account via this website
     b. The second will be making sure that once I am authorized I can pull analytical data from the site and return it. Again this will be verified with POSTMAN.
 4. Once the above is all verified I will be connecting my application to the frontend and handling all of the appropriate routing.
+
+
+## How to Install Locally
+1. On this repository go to Code > Download ZIP
+2. Unzip the file in your local directory and then change into the unzipped file
+3. From within this directory create a virtual environment and download Python Version: 3.11.4 (This can be found in the runtime.txt file)
+4. Use the following command to install all dependencies: pip install -r requirements.txt
+5. Run the following command to spin up the local instance: flask --app analytics_api run
