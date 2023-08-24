@@ -8,6 +8,7 @@ Design Patterns: Factory, Decorator
 
 Gameplan:
 1. As a base I want to make sure that a single file Flask App will deploy onto Heroku.
+![image](https://github.com/cesarguerrero1/analytics_backend/assets/62967999/ee45b84b-dbea-427a-8a1d-4b12d8a1a778)
 2. Once that is verified I will build my file structure and ensure that all of my pages are returning "dummy" data via POSTMAN API calls
 3. I will then start connecting my application to Twitter and there will be two major themes:
     a. The first will be making sure that I can appropriately authorize my personal account via this website
