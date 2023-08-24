@@ -1,8 +1,10 @@
-from flask import Flask
+'''
+Cesar Guerrero
+08/24/23
 
-app = Flask(__name__)
+This file is just here to communicate with the Procfile
+'''
 
-@app.route('/')
-def heroku_connection():
-    return "<h1>The backend is now live on Heroku!</h1>"
+from analytics_api import create_app
 
+app = create_app()
