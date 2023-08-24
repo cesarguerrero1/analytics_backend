@@ -1,1 +1,1 @@
-web: gunicorn ./analytics_api/__init__:app
+web: gunicorn app:app
