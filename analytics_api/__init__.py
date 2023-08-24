@@ -13,10 +13,16 @@ def create_app():
     app = Flask(__name__)
 
     if os.getenv("ENVIRONMENT") == "PRODUCTION":
-        print("Production")
+        #Set our Secret Key if we are in production
+       app.config.from_mapping(
+           #Get environmental variables from Heroku
+           SECRET_KEY=os.getenv("SECRET_KEY")
+       )
     else:
-        print("Development")
-    
+        #We are in production so just setting a dummy variable
+        app.config.from_mapping(
+            SECRET_KEY="dev"
+        )
     #Register all of our controllers
     app.register_blueprint(auth_controller.bp)
     app.register_blueprint(dashboard_controller.bp)
