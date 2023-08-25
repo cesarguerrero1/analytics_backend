@@ -16,15 +16,15 @@ def create_app():
         #Set our Secret Key if we are in production
        app.config.from_mapping(
            #Get environmental variables from Heroku
-           SECRET_KEY=os.getenv("SECRET_KEY")
+           SECRET_KEY=os.getenv("SECRET_KEY"),
        )
     else:
         #We are in production so just setting a dummy variable
         app.config.from_mapping(
-            SECRET_KEY="dev"
+            SECRET_KEY="dev",
         )
+
     #Register all of our controllers
     app.register_blueprint(auth_controller.bp)
     app.register_blueprint(dashboard_controller.bp)
-
     return app

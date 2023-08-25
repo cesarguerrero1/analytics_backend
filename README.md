@@ -19,6 +19,6 @@ Gameplan:
 ## How to Install Locally
 1. On this repository go to Code > Download ZIP
 2. Unzip the file in your local directory and then change into the unzipped file
-3. From within this directory create a virtual environment and download Python Version: 3.11.4 (This can be found in the runtime.txt file)
+3. From within this directory create a Virtual Python Environment using the version found in the runtime.txt file
 4. Use the following command to install all dependencies: pip install -r requirements.txt
 5. Run the following command to spin up the local instance: flask --app analytics_api run
