@@ -8,22 +8,44 @@ it further
 
 '''
 import os
-import requests
 import httpx
-from requests_oauthlib import OAuth1
+from authlib.integrations.httpx_client import AsyncOAuth1Client
 from flask import session
 
 #This method is used to obtain the request tokens from Twitter in preperation for a user to sign in to our site via twitter
 async def obtain_twitter_request_token():
     endpoint_url = 'https://api.twitter.com/oauth/request_token'
 
-    #NOTE: Potential issue.. YOu cannot AWAIT the oauth for some reason...
-    oauth = OAuth1(client_key=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"), callback_uri=os.getenv("CALLBACK_URI"))
-    response = requests.post(endpoint_url, auth=oauth)
+    try:
+        client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"), redirect_uri=os.getenv("CALLBACK_URI"))
+        response = await client.fetch_request_token(endpoint_url)
+        #Need to verify that Twitter will know where to redirect
+        if response['oauth_callback_confirmed'] != 'true':
+            return False
+        
+        #Store our request tokens in the session
+        session['oauth_token'] = response['oauth_token']
+        session['oauth_token_secret'] = response['oauth_token_secret']
 
-    if response.status_code == 200:
-        parameters = response.text.split("&")
-        for text in parameters:
-            key_value = text.split("=")
-            session[key_value[0]] = key_value[1]
-    return
+        return True
+    
+    except:
+        #We failed the first-leg of OAuth1.0
+        return False
+
+#This method completes the last leg of the identification process
+async def obtain_twitter_access_token(oauth_verifier, session_token, session_secret):
+    endpoint_url = 'https://api.twitter.com/oauth/access_token'
+
+    try:
+        client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"))
+        response = await client.fetch_access_token(endpoint_url, verifier=oauth_verifier, token=session_token, token_secret=session_secret)
+
+        #Store these now verified keys in the session for future API calls
+        session['auth_key'] = response['oauth_token']
+        session['auth_secret'] = response ['oauth_token_secret']
+
+        return True
+    except:
+
+        return False
