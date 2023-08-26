@@ -20,12 +20,12 @@ async def obtain_twitter_request_token():
         client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"), redirect_uri=os.getenv("CALLBACK_URI"))
         response = await client.fetch_request_token(endpoint_url)
         #Need to verify that Twitter will know where to redirect
-        if response['oauth_callback_confirmed'] != 'true':
+        if response.get('oauth_callback_confirmed')!= 'true':
             return False
         
         #Store our request tokens in the session
-        session['oauth_token'] = response['oauth_token']
-        session['oauth_token_secret'] = response['oauth_token_secret']
+        session['oauth_token'] = response.get('oauth_token')
+        session['oauth_token_secret'] = response.get('oauth_token_secret')
 
         return True
     
@@ -42,10 +42,9 @@ async def obtain_twitter_access_token(oauth_verifier, session_token, session_sec
         response = await client.fetch_access_token(endpoint_url, verifier=oauth_verifier, token=session_token, token_secret=session_secret)
 
         #Store these now verified keys in the session for future API calls
-        session['auth_key'] = response['oauth_token']
-        session['auth_secret'] = response ['oauth_token_secret']
+        session['auth_key'] = response.get('oauth_token')
+        session['auth_secret'] = response.get('oauth_token_secret')
 
         return True
     except:
-
         return False

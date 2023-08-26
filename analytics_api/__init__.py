@@ -7,6 +7,7 @@ This file serves as our 'Application Factory'. Depending on the environment, we 
 
 import os
 from flask import Flask
+from flask_session import Session
 from .controllers import (auth_controller, dashboard_controller)
 
 def create_app():
@@ -14,15 +15,22 @@ def create_app():
 
     if os.getenv("ENVIRONMENT") == "PRODUCTION":
         #Set our Secret Key if we are in production
-       app.config.from_mapping(
-           #Get environmental variables from Heroku
-           SECRET_KEY=os.getenv("SECRET_KEY"),
-       )
+        app.config.from_mapping(
+            #Get environmental variables from Heroku
+            SECRET_KEY=os.getenv("SECRET_KEY"),
+            SESSION_COOKIE_HTTPONLY=False, #Default is True
+            SESSION_COOKIE_SECURE=True #Defaul is False
+        )
     else:
         #We are in production so just setting a dummy variable
         app.config.from_mapping(
             SECRET_KEY="dev",
         )
+    
+
+    #We do not want to use Flask's built-in session
+    app.config['SESSION_TYPE']='redis'
+    Session(app)
 
     #Register all of our controllers
     app.register_blueprint(auth_controller.bp)
