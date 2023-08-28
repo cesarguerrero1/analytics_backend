@@ -34,9 +34,9 @@ async def obtain_twitter_request_token():
         session['oauth_token_secret'] = response.get('oauth_token_secret')
         return True
     
-    except:
+    except Exception as e:
         #We failed the first-leg of OAuth1.0
-        print("Never Worked...")
+        print(e)
         sys.stdout.flush()
         return False
 
