@@ -8,9 +8,10 @@ it further
 
 '''
 import os
+import sys
 import httpx
 from authlib.integrations.httpx_client import AsyncOAuth1Client
-from flask import session, current_app
+from flask import session
 
 #This method is used to obtain the request tokens from Twitter in preperation for a user to sign in to our site via twitter
 async def obtain_twitter_request_token():
@@ -20,7 +21,8 @@ async def obtain_twitter_request_token():
         client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"), redirect_uri=os.getenv("CALLBACK_URI"))
         response = await client.fetch_request_token(endpoint_url)
 
-        current_app.logger.info(response)
+        print(response)
+        sys.stdout.flush()
         #Need to verify that Twitter will know where to redirect
         if response.get('oauth_callback_confirmed')!= 'true':
             return False

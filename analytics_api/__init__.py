@@ -19,11 +19,6 @@ from .controllers import (auth_controller, dashboard_controller)
 def create_app():
     app = Flask(__name__)
 
-    #Heroku Logging
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    app.logger.handlers = gunicorn_logger.handlers
-    app.logger.setLevel(gunicorn_logger.level)
-
     #We do not want to use Flask's built-in session
     app.config['SESSION_USE_SIGNER'] = True
     app.config['SESSION_TYPE']='redis'
