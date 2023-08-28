@@ -19,6 +19,8 @@ async def obtain_twitter_request_token():
 
     try:
         client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"), redirect_uri=os.getenv("CALLBACK_URI"))
+        print(client)
+        sys.stdout.flush()
         response = await client.fetch_request_token(endpoint_url)
 
         print(response)
