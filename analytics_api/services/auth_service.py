@@ -19,14 +19,14 @@ async def obtain_twitter_request_token():
 
     try:
         client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"), redirect_uri=os.getenv("CALLBACK_URI"))
-        print(client)
-        sys.stdout.flush()
         response = await client.fetch_request_token(endpoint_url)
-
-        print(response)
+        print(response.get('oauth_callback_confirmed'))
         sys.stdout.flush()
+        
         #Need to verify that Twitter will know where to redirect
-        if response.get('oauth_callback_confirmed')!= 'true':
+        if response.get('oauth_callback_confirmed') != 'true':
+            print("Here")
+            sys.stdout.flush()
             return False
         
         #Store our request tokens in the session
@@ -36,6 +36,8 @@ async def obtain_twitter_request_token():
     
     except:
         #We failed the first-leg of OAuth1.0
+        print("Never Worked...")
+        sys.stdout.flush()
         return False
 
 #This method completes the last leg of the identification process

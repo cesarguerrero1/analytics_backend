@@ -25,7 +25,7 @@ def profile():
         return jsonify({"is_logged_in": False, "current_user": None})
 
 #This route is where the one-click login will occur -- Eventually we want to send a paramter detailing what we are trying to login to (Twitter, Pinterest, Etc.)
-@bp.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET'])
 async def login():
     '''
     Guidelines:
@@ -37,9 +37,6 @@ async def login():
     if request.method == "GET":
         #This means they are not logged in so generate our tokens in preperation
         response = await auth_service.obtain_twitter_request_token()
-        
-        print(response)
-        sys.stdout.flush()
 
         #We need to alert the frontend of the status of our request
         if response:
