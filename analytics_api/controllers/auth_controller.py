@@ -6,7 +6,7 @@ The Authentication Controller is what will be handling all of the HTTP Endpoints
 authenticated with the external API
 
 '''
-from flask import (Blueprint, request, session, url_for)
+from flask import (Blueprint, request, session, jsonify, url_for)
 from ..services import auth_service
 
 #Creating our blueprint so we can register with the application
@@ -14,10 +14,14 @@ bp = Blueprint('auth', __name__)
 
 
 #Check if the user is logged in.
-@bp.route('/profile')
+@bp.route('/profile', methods=['GET'])
 def profile():
-    return session.get('is_logged_in', "FALSE")
-
+    if session.get('is_logged_in', None) != None:
+        #A session exists for the given user
+        return jsonify({"is_logged_in": True, "current_user": session.get("username")})
+    else:
+        #A session does not exist for the given user
+        return jsonify({"is_logged_in": False, "current_user":None})
 
 #This route is where the one-click login will occur -- Eventually we want to send a paramter detailing what we are trying to login to (Twitter, Pinterest, Etc.)
 @bp.route('/login', methods=['GET', 'POST'])
