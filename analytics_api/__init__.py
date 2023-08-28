@@ -6,7 +6,6 @@ This file serves as our 'Application Factory'. Depending on the environment, we 
 '''
 
 import os
-import logging
 import redis
 from flask import Flask
 from flask_session import Session
