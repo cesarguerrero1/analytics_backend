@@ -47,6 +47,8 @@ async def login():
 #This is the page that Twitter will redirect to after the user has either allowed or disallowed our app to act on their behalf
 @bp.route('/callback')
 async def callback():
+    print(session)
+    sys.stdout.flush()
     #Look at the request parameters
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')

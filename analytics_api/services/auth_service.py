@@ -29,6 +29,8 @@ async def obtain_twitter_request_token():
 
         session['oauth_token'] = request_token[b'oauth_token'].decode('utf-8')
         session['oauth_token_secret'] = request_token[b'oauth_token_secret'].decode('utf-8')
+        print(session)
+        sys.stdout.flush()
         return True
     
     except:
