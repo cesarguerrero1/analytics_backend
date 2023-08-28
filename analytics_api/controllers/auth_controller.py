@@ -21,7 +21,7 @@ def profile():
         return jsonify({"is_logged_in": True, "current_user": session.get("username")})
     else:
         #A session does not exist for the given user
-        return jsonify({"is_logged_in": False, "current_user":None})
+        return jsonify({"is_logged_in": False, "current_user": None})
 
 #This route is where the one-click login will occur -- Eventually we want to send a paramter detailing what we are trying to login to (Twitter, Pinterest, Etc.)
 @bp.route('/login', methods=['GET', 'POST'])
@@ -39,13 +39,9 @@ async def login():
         
         #We need to alert the frontend of the status of our request
         if response:
-            return 'TRUE'
+            return jsonify({"oauth_ready": True, "oauth_token": session.get("oauth_token")})
         else:
-            return 'FALSE'
-    
-    if request.method == "POST":
-        #The user has clicked on the "Sign in with Twitter Button" and will need this key to ping the correct site
-        return session.get('oauth_token', "NONE")
+            return jsonify({"oauth_ready": False})
 
 #This is the page that Twitter will redirect to after the user has either allowed or disallowed our app to act on their behalf
 @bp.route('/callback')
@@ -53,22 +49,17 @@ async def callback():
     #Look at the request parameters
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
-    oauth_denied = request.args.get('denied') #This will only exist if we were denied.
 
-    if oauth_denied:
-        #We were denied and so display an error message
-        return "DENIED"
-    
     #The final step is to get a full-fledged credential
     if oauth_token != session['oauth_token']:
-        return "ERROR"
+        return jsonify({"oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
 
     if response:
-        return 'TRUE'
+        return jsonify({"oauth_approved": False, "current_user": session.get("username")})
     else:
-        return 'FALSE'
+        return jsonify({"oauth_approved": False, "current_user": None})
 
 #Any HTTP call to this route should immediately destroy the session
 @bp.route('/logout')

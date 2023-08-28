@@ -26,7 +26,6 @@ async def obtain_twitter_request_token():
         #Store our request tokens in the session
         session['oauth_token'] = response.get('oauth_token')
         session['oauth_token_secret'] = response.get('oauth_token_secret')
-
         return True
     
     except:
@@ -40,11 +39,11 @@ async def obtain_twitter_access_token(oauth_verifier, session_token, session_sec
     try:
         client = AsyncOAuth1Client(client_id=os.getenv("API_KEY"), client_secret=os.getenv("API_SECRET"))
         response = await client.fetch_access_token(endpoint_url, verifier=oauth_verifier, token=session_token, token_secret=session_secret)
-
         #Store these now verified keys in the session for future API calls
         session['auth_key'] = response.get('oauth_token')
         session['auth_secret'] = response.get('oauth_token_secret')
-
+        session['username'] = response.get('screen_name')
+        session['user_id'] = response.get('user_id')
         return True
     except:
         return False
