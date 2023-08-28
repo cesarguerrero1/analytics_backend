@@ -6,6 +6,7 @@ This file serves as our 'Application Factory'. Depending on the environment, we 
 '''
 
 import os
+import logging
 import redis
 from flask import Flask
 from flask_session import Session
@@ -17,6 +18,11 @@ from .controllers import (auth_controller, dashboard_controller)
 #We are creating our Flask Server
 def create_app():
     app = Flask(__name__)
+
+    #Heroku Logging
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
     #We do not want to use Flask's built-in session
     app.config['SESSION_USE_SIGNER'] = True
