@@ -17,6 +17,8 @@ bp = Blueprint('auth', __name__)
 #Check if the user is logged in.
 @bp.route('/profile', methods=['GET'])
 def profile():
+    print(session)
+    sys.stdout.flush()
     if session.get('is_logged_in', None) != None:
         #A session exists for the given user
         return jsonify({"is_logged_in": True, "current_user": session.get("username")})
