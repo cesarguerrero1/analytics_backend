@@ -19,11 +19,13 @@ bp = Blueprint('auth', __name__)
 def profile():
     print(session)
     sys.stdout.flush()
-    if session.get('is_logged_in', None) != None:
+    if session.get('is_logged_in', None) == True:
         #A session exists for the given user
         return jsonify({"is_logged_in": True, "current_user": session.get("username")})
     else:
         #A session does not exist for the given user
+        session['is_logged_in'] = False
+        session['current_user'] = None
         return jsonify({"is_logged_in": False, "current_user": None})
 
 #This route is where the one-click login will occur -- Eventually we want to send a paramter detailing what we are trying to login to (Twitter, Pinterest, Etc.)
