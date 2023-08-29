@@ -29,12 +29,12 @@ def create_app():
             SECRET_KEY=os.getenv("SECRET_KEY"),
             SESSION_COOKIE_HTTPONLY=True,
             SESSION_COOKIE_SECURE=True,
-            SESSION_COOKIE_SAMESITE=None,
+            SESSION_COOKIE_SAMESITE="None",
             SESSION_PERMANENT=False,
             SESSION_REDIS=redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), password=os.getenv("REDIS_PASSWORD"))
         )
         Session(app)
-        cors = CORS(app, origins=[os.getenv("FRONT_END_URL")], supports_credentials=True)
+        CORS(app, origins=[os.getenv("FRONT_END_URL")], supports_credentials=True)
     else:
         #We are in production so just setting a dummy variable
         app.config.from_mapping(
@@ -42,7 +42,7 @@ def create_app():
             SESSION_REDIS=redis.Redis(host='localhost', port=6379)
         )
         Session(app)
-        cors = CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
+        CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
 
     #Register all of our controllers
     app.register_blueprint(auth_controller.bp)

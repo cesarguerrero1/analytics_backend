@@ -21,7 +21,7 @@ def profile():
     sys.stdout.flush()
     if session.get('is_logged_in', None) == True:
         #A session exists for the given user
-        return jsonify({"is_logged_in": True, "current_user": session.get("username")})
+        return jsonify({"is_logged_in": True, "current_user": session.get("current_user")})
     else:
         #A session does not exist for the given user
         session['is_logged_in'] = False
@@ -51,8 +51,6 @@ async def login():
 #This is the page that Twitter will redirect to after the user has either allowed or disallowed our app to act on their behalf
 @bp.route('/callback')
 async def callback():
-    print(session)
-    sys.stdout.flush()
     #Look at the request parameters
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
@@ -64,6 +62,8 @@ async def callback():
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
 
     if response:
+        session['current_user'] = session['username']
+        session['is_logged_in'] = True
         return jsonify({"oauth_approved": False, "current_user": session.get("username")})
     else:
         return jsonify({"oauth_approved": False, "current_user": None})
