@@ -6,8 +6,8 @@ The Authentication Controller is what will be handling all of the HTTP Endpoints
 authenticated with the external API
 
 '''
-import sys
-from flask import (Blueprint, request, session, jsonify, url_for)
+
+from flask import (Blueprint, request, session, jsonify)
 from ..services import auth_service
 
 #Creating our blueprint so we can register with the application
@@ -17,29 +17,16 @@ bp = Blueprint('auth', __name__)
 #Check if the user is logged in.
 @bp.route('/profile', methods=['GET'])
 def profile():
-    print(session)
-    sys.stdout.flush()
-    if session.get('is_logged_in', None) == True:
-        #A session exists for the given user
-        return jsonify({"is_logged_in": True, "current_user": session.get("current_user")})
-    else:
-        #A session does not exist for the given user
-        session['is_logged_in'] = False
-        session['current_user'] = None
-        return jsonify({"is_logged_in": False, "current_user": None})
+    return is_logged_in(session.get('is_logged_in', None))
 
-#This route is where the one-click login will occur -- Eventually we want to send a paramter detailing what we are trying to login to (Twitter, Pinterest, Etc.)
+#This route is where the one-click login call will occur
 @bp.route('/login', methods=['GET'])
 async def login():
-    '''
-    Guidelines:
-    1. When you make a GET request to the login page there should be a check of whether or not you are logged in.
-        a. If you are logged in then we should redirect you to the dashboard.
-        b. if you are not logged in then we should stay on the page and allow you to click on the button to login
-    2. When you make a POST request then we need to now begin the authorization process
-    '''
+
+    #Whenever there is a get request we want to generate tokens
     if request.method == "GET":
-        #This means they are not logged in so generate our tokens in preperation
+        
+        #Call our specific service. NOTE: We will need to make calls to various external APIS (Twitter, Pinterest, Instagram, Etc.)
         response = await auth_service.obtain_twitter_request_token()
 
         #We need to alert the frontend of the status of our request
@@ -61,6 +48,7 @@ async def callback():
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
 
+    #Alert the frontend to update its state
     if response:
         session['current_user'] = session['username']
         session['is_logged_in'] = True
@@ -72,4 +60,23 @@ async def callback():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return 'TRUE'
+    return jsonify({"session_destroyed": True})
+
+
+
+
+
+
+############# HELPER FUNCTIONS #############
+
+#Function to check whether a user is logged in. It will set some session key-values if no user is found
+def is_logged_in(log_key):
+    if log_key == True:
+        #A session exists for the given user
+        return jsonify({"is_logged_in": True, "current_user": session.get("current_user")})
+    else:
+        #A session does not exist for the given user
+        session['is_logged_in'] = False
+        session['current_user'] = None
+
+        return jsonify({"is_logged_in": False, "current_user": None})
