@@ -29,5 +29,5 @@ def test_config():
     #Testing Build
     test_app = create_app("TESTING")
     assert test_app.secret_key =='test'
-    assert dev_app.config['SESSION_COOKIE_HTTPONLY'] == False
+    assert dev_app.config['SESSION_COOKIE_HTTPONLY'] == True
     assert test_app.testing
