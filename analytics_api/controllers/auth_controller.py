@@ -63,10 +63,6 @@ def logout():
     return jsonify({"session_destroyed": True})
 
 
-
-
-
-
 ############# HELPER FUNCTIONS #############
 
 #Function to check whether a user is logged in. It will set some session key-values if no user is found
