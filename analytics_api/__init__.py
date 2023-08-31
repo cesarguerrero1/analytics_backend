@@ -15,11 +15,11 @@ from flask_cors import CORS
 from .controllers import (auth_controller, dashboard_controller)
 
 #We are creating our Flask Server
-def create_app():
+def create_app(environment = None):
     app = Flask(__name__)
 
     #Depending on the environment, deploy different settings
-    factory(os.getenv("ENVIRONMENT"), app)
+    factory(environment, app)
 
     #Activate Sessions and CORS
     Session(app)
@@ -48,9 +48,16 @@ def factory(factoryInstanceType, app):
             SESSION_REDIS=redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), password=os.getenv("REDIS_PASSWORD"))
         )
     else:
-        #We are in production so just setting a dummy variable
-        app.config.from_mapping(
-            SECRET_KEY="dev",
-            SESSION_REDIS=redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"))
-        )
+        app.config['SESSION_REDIS']=redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"))
+        app.config['SESSION_COOKIE_HTTPONLY'] = False
+        if factoryInstanceType == "DEV":
+            app.config.from_mapping(
+                SECRET_KEY='dev',
+            )
+
+        elif factoryInstanceType == "TESTING":
+            app.config.from_mapping(
+                SECRET_KEY='test',
+                TESTING=True
+            )
     return 
