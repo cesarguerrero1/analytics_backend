@@ -52,7 +52,7 @@ async def callback():
     if response:
         session['current_user'] = session['username']
         session['is_logged_in'] = True
-        return jsonify({"oauth_approved": False, "current_user": session.get("username")})
+        return jsonify({"oauth_approved": True, "current_user": session.get("username")})
     else:
         return jsonify({"oauth_approved": False, "current_user": None})
 
