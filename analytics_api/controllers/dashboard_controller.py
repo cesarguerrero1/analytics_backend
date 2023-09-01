@@ -6,7 +6,7 @@ The Dashboard Controller is what will be handling all of the HTTP Endpoints once
 
 '''
 
-from flask import (Blueprint, request, session, url_for)
+from flask import (Blueprint, request, session)
 from ..services import dashboard_service
 
 #Creating our blueprint so we can register with the application
