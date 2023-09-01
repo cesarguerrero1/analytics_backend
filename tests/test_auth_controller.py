@@ -31,7 +31,7 @@ class TestProfileClass:
         response = client.get('/profile')
         assert response.data == b'{"current_user":null,"is_logged_in":false}\n'
     
-#Testing the login route
+#Testing the login Route
 class TestLoginClass:
 
     @patch('analytics_api.services.auth_service.obtain_twitter_request_token', new=AsyncMock(return_value={"status_code": 200, "oauth_token": "abc"}))
@@ -47,6 +47,7 @@ class TestLoginClass:
         response = client.get('/login')
         assert response.data == b'{"oauth_ready":false}\n'
 
+#Testing the Callback Route
 class TestCallbackClass:
     
     @patch('analytics_api.services.auth_service.obtain_twitter_access_token', new=AsyncMock(return_value={"status_code": 200, "current_user": 'me'}))

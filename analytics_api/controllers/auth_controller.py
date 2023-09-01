@@ -26,7 +26,8 @@ async def login():
     #Whenever there is a get request we want to generate tokens
     if request.method == "GET":
         
-        #Call our specific service. NOTE: We will need to make calls to various external APIS (Twitter, Pinterest, Instagram, Etc.)
+        #Call our specific service
+        #NOTE: We will need to make calls to various external APIS (Twitter, Pinterest, Instagram, Etc.)
         response = await auth_service.obtain_twitter_request_token()
 
         #We need to alert the frontend of the status of our request

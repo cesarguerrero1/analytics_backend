@@ -55,7 +55,11 @@ async def twitter_request_call():
     endpoint_url = 'https://api.twitter.com/oauth/request_token'
     consumer = oauth.Consumer(os.getenv("API_KEY"), os.getenv("API_SECRET"))
     client = oauth.Client(consumer)
-    client_response,content = client.request(endpoint_url, "POST", body=urllib.parse.urlencode({"oauth_callback": os.getenv("CALLBACK_URI")}))
+    client_response,content = client.request(
+        endpoint_url,
+        "POST", 
+        body=urllib.parse.urlencode({"oauth_callback": os.getenv("CALLBACK_URI")})
+    )
     print(client_response,content)
     #Build our response object
     response = {}
