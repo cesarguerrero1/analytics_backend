@@ -4,7 +4,8 @@ Cesar Guerrero
 
 This is to setup your test environment in PyTest
 '''
-
+import shutil
+import os
 import pytest
 from analytics_api import create_app
 

@@ -30,8 +30,9 @@ async def login():
         response = await auth_service.obtain_twitter_request_token()
 
         #We need to alert the frontend of the status of our request
-        if response:
-            return jsonify({"oauth_ready": True, "oauth_token": session.get("oauth_token")})
+        if response['status_code'] == 200:
+            response['oauth_ready'] = True
+            return jsonify(response)
         else:
             return jsonify({"oauth_ready": False})
 
@@ -41,18 +42,16 @@ async def callback():
     #Look at the request parameters
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
-
     #The final step is to get a full-fledged credential
     if oauth_token != session['oauth_token']:
         return jsonify({"oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
-
     #Alert the frontend to update its state
-    if response:
-        session['current_user'] = session['username']
+    if response['status_code'] == 200:
         session['is_logged_in'] = True
-        return jsonify({"oauth_approved": True, "current_user": session.get("username")})
+        response['oauth_approved']=True
+        return jsonify(response)
     else:
         return jsonify({"oauth_approved": False, "current_user": None})
 
