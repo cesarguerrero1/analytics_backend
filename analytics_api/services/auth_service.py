@@ -27,7 +27,7 @@ async def obtain_twitter_request_token():
     session['oauth_token'] = response['oauth_token']
     session['oauth_token_secret'] = response['oauth_token_secret']
 
-    return {"status_code": 200, 'oauth_token': session['oauth_token']}
+    return {"status_code": 200, 'status_message': "OK", 'oauth_token': session['oauth_token']}
 
 #This method completes the last leg of the identification process
 async def obtain_twitter_access_token(oauth_verifier, session_token, session_secret):
@@ -45,7 +45,7 @@ async def obtain_twitter_access_token(oauth_verifier, session_token, session_sec
     session['current_user'] = response['current_user']
     session['user_id'] = response['user_id']
 
-    return {"status_code": 200, "current_user": session['current_user']}
+    return {"status_code": 200, 'status_message': "OK", "current_user": session['current_user']}
     
 
 ##### HELPER FUNCTIONS ######
@@ -60,7 +60,7 @@ async def twitter_request_call():
         "POST", 
         body=urllib.parse.urlencode({"oauth_callback": os.getenv("CALLBACK_URI")})
     )
-    print(client_response,content)
+    
     #Build our response object
     response = {}
     response['status'] = client_response['status']

@@ -22,7 +22,6 @@ def profile():
 #This route is where the one-click login call will occur
 @bp.route('/login', methods=['GET'])
 async def login():
-
     #Whenever there is a get request we want to generate tokens
     if request.method == "GET":
         
@@ -35,7 +34,8 @@ async def login():
             response['oauth_ready'] = True
             return jsonify(response)
         else:
-            return jsonify({"oauth_ready": False})
+            response['oauth_ready'] = False
+            return jsonify(response)
 
 #This is the page that Twitter will redirect to after the user has either allowed or disallowed our app to act on their behalf
 @bp.route('/callback')
@@ -45,7 +45,7 @@ async def callback():
     oauth_verifier = request.args.get('oauth_verifier')
     #The final step is to get a full-fledged credential
     if oauth_token != session['oauth_token']:
-        return jsonify({"oauth_approved": False, "current_user": None})
+        return jsonify({'status_code': 401, 'status_message': "Unauthorized", "oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
     #Alert the frontend to update its state
@@ -54,13 +54,15 @@ async def callback():
         response['oauth_approved']=True
         return jsonify(response)
     else:
-        return jsonify({"oauth_approved": False, "current_user": None})
+        response['oauth_approved']=False
+        response['current_user']=None
+        return jsonify(response)
 
 #Any HTTP call to this route should immediately destroy the session
 @bp.route('/logout')
 def logout():
     session.clear()
-    return jsonify({"session_destroyed": True})
+    return jsonify({'status_code': 200, 'status_message': "OK", "session_destroyed": True})
 
 
 ############# HELPER FUNCTIONS #############
@@ -69,10 +71,10 @@ def logout():
 def is_logged_in(log_key):
     if log_key == True:
         #A session exists for the given user
-        return jsonify({"is_logged_in": True, "current_user": session.get("current_user")})
+        return jsonify({'status_code': 200, 'status_message': "OK", "is_logged_in": True, "current_user": session.get("current_user")})
     else:
         #A session does not exist for the given user
         session['is_logged_in'] = False
         session['current_user'] = None
 
-        return jsonify({"is_logged_in": False, "current_user": None})
+        return jsonify({'status_code': 200, 'status_message': "OK", "is_logged_in": False, "current_user": None})

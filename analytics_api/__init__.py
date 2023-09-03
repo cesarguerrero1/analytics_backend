@@ -14,7 +14,7 @@ from flask_cors import CORS
 #Controllers
 from .controllers import (auth_controller, dashboard_controller)
 
-#We are creating our Flask Server
+#We are creating our Flask Server - If no environment is found just assume we are testing
 def create_app(environment = "TESTING"):
     app = Flask(__name__)
 

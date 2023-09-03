@@ -34,7 +34,7 @@ class TestClassRequest():
         with client:
             client.get('/profile')
             response = await auth_service.obtain_twitter_request_token()
-            assert response == {"status_code": 200, 'oauth_token':'abc'}
+            assert response == {"status_code": 200, 'status_message':"OK", 'oauth_token':'abc'}
 
 #Mock testing our call to the Twitter API for the third leg of Oauth
 class TestClassAuthorization():
@@ -65,5 +65,5 @@ class TestClassAuthorization():
             #We need to initialize a session
             client.get('/profile')
             response = await auth_service.obtain_twitter_access_token(self.oauth_verifier, self.session_token, self.session_secret)
-            assert response ==  {'status_code': 200, 'current_user':"Me"}
+            assert response ==  {'status_code': 200,'status_message':"OK",'current_user':"Me"}
 
