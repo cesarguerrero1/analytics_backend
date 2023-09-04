@@ -54,6 +54,8 @@ async def callback():
         sys.stdout.flush()
         session['is_logged_in'] = True
         response['oauth_approved']=True
+        print(response)
+        sys.stdout.flush()
         return jsonify(response)
     else:
         print("NOT AUTHORIZED!")
