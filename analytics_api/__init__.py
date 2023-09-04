@@ -60,6 +60,6 @@ def factory(factoryInstanceType, app):
                 SESSION_COOKIE_HTTPONLY=False
             )
         Session(app)
-         #Activate Sessions and CORS
+        #Activate Sessions and CORS
         CORS(app, origins=[os.getenv("FRONT_END_URL")], supports_credentials=True)
     return 
