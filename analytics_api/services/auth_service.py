@@ -92,7 +92,7 @@ async def twitter_authorization_call(oauth_verifier, session_token, session_secr
     client = oauth.Client(consumer, token)
     client_response, content = await client.request(endpoint_url, "POST")
     print(client_response, content)
-    sys.flush.out()
+    sys.stdout.flush()
     #Build our response object
     response = {}
     response['status'] = client_response['status']
