@@ -28,7 +28,6 @@ async def login():
         #Call our specific service
         #NOTE: We will need to make calls to various external APIS (Twitter, Pinterest, Instagram, Etc.)
         response = await auth_service.obtain_twitter_request_token()
-
         #We need to alert the frontend of the status of our request
         if response['status_code'] == 200:
             response['oauth_ready'] = True
@@ -44,14 +43,15 @@ async def callback():
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
     #The final step is to get a full-fledged credential
-    print(session)
-    sys.stdout.flush()
     if oauth_token != session['oauth_token']:
+        print("Oauth token mismatch")
+        sys.flush.out()
         return jsonify({'status_code': 401, 'status_message': "Unauthorized", "oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
+    print("Response from service")
     print(response)
-    sys.stdout.flush()
+    sys.flush.out()
     #Alert the frontend to update its state
     if response['status_code'] == 200:
         session['is_logged_in'] = True
@@ -60,6 +60,9 @@ async def callback():
     else:
         response['oauth_approved']=False
         response['current_user']=None
+        print("Updated response to send to frontend")
+        print(response)
+        sys.flush.out()
         return jsonify(response)
 
 #Any HTTP call to this route should immediately destroy the session

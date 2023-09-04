@@ -7,6 +7,7 @@ and when it returns information we need to curate it such that the controller is
 it further
 
 '''
+import sys
 import os
 import oauth2 as oauth
 import urllib
@@ -33,10 +34,17 @@ async def obtain_twitter_request_token():
 async def obtain_twitter_access_token(oauth_verifier, session_token, session_secret):
     try:
         response = await twitter_authorization_call(oauth_verifier, session_token, session_secret)
+        print("Response from helper function")
+        print(response)
+        sys.stdout.flush()
     except:
+        print("ERROR!")
+        sys.stdout.flush()
         return {"status_code": 400, "status_message": "ERROR"}
 
     if response['status'] != '200':
+        print("Response status was not 200")
+        sys.stdout.flush()
         return {"status_code": int(response['status']), "status_message": "Unauthorized"}
     
     #Store these now verified keys in the session for future API calls
@@ -83,7 +91,8 @@ async def twitter_authorization_call(oauth_verifier, session_token, session_secr
     token.set_verifier(oauth_verifier)
     client = oauth.Client(consumer, token)
     client_response, content = await client.request(endpoint_url, "POST")
-
+    print(client_response, content)
+    sys.flush.out()
     #Build our response object
     response = {}
     response['status'] = client_response['status']
