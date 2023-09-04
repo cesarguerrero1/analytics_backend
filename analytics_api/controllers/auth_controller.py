@@ -6,7 +6,7 @@ The Authentication Controller is what will be handling all of the HTTP Endpoints
 authenticated with the external API
 
 '''
-
+import sys
 from flask import (Blueprint, request, session, jsonify)
 from ..services import auth_service
 
@@ -44,10 +44,14 @@ async def callback():
     oauth_token = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
     #The final step is to get a full-fledged credential
+    print(session)
+    sys.stdout.flush()
     if oauth_token != session['oauth_token']:
         return jsonify({'status_code': 401, 'status_message': "Unauthorized", "oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
+    print(response)
+    sys.stdout.flush()
     #Alert the frontend to update its state
     if response['status_code'] == 200:
         session['is_logged_in'] = True
