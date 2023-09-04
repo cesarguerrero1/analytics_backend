@@ -44,14 +44,9 @@ async def callback():
     oauth_verifier = request.args.get('oauth_verifier')
     #The final step is to get a full-fledged credential
     if oauth_token != session['oauth_token']:
-        print("Oauth token mismatch")
-        sys.stdout.flush()
         return jsonify({'status_code': 401, 'status_message': "Unauthorized", "oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
-    print("Response from service")
-    print(response)
-    sys.stdout.flush()
     #Alert the frontend to update its state
     if response['status_code'] == 200:
         session['is_logged_in'] = True
@@ -60,9 +55,6 @@ async def callback():
     else:
         response['oauth_approved']=False
         response['current_user']=None
-        print("Updated response to send to frontend")
-        print(response)
-        sys.stdout.flush()
         return jsonify(response)
 
 #Any HTTP call to this route should immediately destroy the session

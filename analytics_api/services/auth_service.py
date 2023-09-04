@@ -32,19 +32,13 @@ async def obtain_twitter_request_token():
 
 #This method completes the last leg of the identification process
 async def obtain_twitter_access_token(oauth_verifier, session_token, session_secret):
+    print(oauth_verifier, session_token, session_secret)
     try:
         response = await twitter_authorization_call(oauth_verifier, session_token, session_secret)
-        print("Response from helper function")
-        print(response)
-        sys.stdout.flush()
     except:
-        print("ERROR!")
-        sys.stdout.flush()
         return {"status_code": 400, "status_message": "ERROR"}
 
     if response['status'] != '200':
-        print("Response status was not 200")
-        sys.stdout.flush()
         return {"status_code": int(response['status']), "status_message": "Unauthorized"}
     
     #Store these now verified keys in the session for future API calls
@@ -63,7 +57,7 @@ async def twitter_request_call():
     endpoint_url = 'https://api.twitter.com/oauth/request_token'
     consumer = oauth.Consumer(os.getenv("API_KEY"), os.getenv("API_SECRET"))
     client = oauth.Client(consumer)
-    client_response,content = client.request(
+    client_response,content = await client.request(
         endpoint_url,
         "POST", 
         body=urllib.parse.urlencode({"oauth_callback": os.getenv("CALLBACK_URI")})
@@ -77,7 +71,8 @@ async def twitter_request_call():
         request_token = dict(urllib.parse.parse_qsl(content))
         response['oauth_token'] = request_token[b'oauth_token'].decode('utf-8')
         response['oauth_token_secret'] = request_token[b'oauth_token_secret'].decode('utf-8')
-
+        print(response)
+        sys.stdout.flush()
     return response
 
 
@@ -91,8 +86,6 @@ async def twitter_authorization_call(oauth_verifier, session_token, session_secr
     token.set_verifier(oauth_verifier)
     client = oauth.Client(consumer, token)
     client_response, content = await client.request(endpoint_url, "POST")
-    print(client_response, content)
-    sys.stdout.flush()
     #Build our response object
     response = {}
     response['status'] = client_response['status']
