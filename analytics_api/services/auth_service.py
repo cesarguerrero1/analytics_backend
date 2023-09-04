@@ -71,8 +71,6 @@ async def twitter_request_call():
         request_token = dict(urllib.parse.parse_qsl(content))
         response['oauth_token'] = request_token[b'oauth_token'].decode('utf-8')
         response['oauth_token_secret'] = request_token[b'oauth_token_secret'].decode('utf-8')
-        print(response)
-        sys.stdout.flush()
     return response
 
 
@@ -86,6 +84,8 @@ async def twitter_authorization_call(oauth_verifier, session_token, session_secr
     token.set_verifier(oauth_verifier)
     client = oauth.Client(consumer, token)
     client_response, content = client.request(endpoint_url, "POST")
+    print(client,response)
+    sys.stdout.flush()
     #Build our response object
     response = {}
     response['status'] = client_response['status']
