@@ -47,12 +47,17 @@ async def callback():
         return jsonify({'status_code': 401, 'status_message': "Unauthorized", "oauth_approved": False, "current_user": None})
     
     response = await auth_service.obtain_twitter_access_token(oauth_verifier, oauth_token, session['oauth_token_secret'])
+    
     #Alert the frontend to update its state
     if response['status_code'] == 200:
+        print("AUTHORIZED!")
+        sys.stdout.flush()
         session['is_logged_in'] = True
         response['oauth_approved']=True
         return jsonify(response)
     else:
+        print("NOT AUTHORIZED!")
+        sys.stdout.flush()
         response['oauth_approved']=False
         response['current_user']=None
         return jsonify(response)
