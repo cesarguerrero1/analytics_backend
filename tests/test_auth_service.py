@@ -28,7 +28,7 @@ class TestClassRequest():
         assert response == {'status_code': 400, 'status_message':"ERROR"}
 
     @pytest.mark.asyncio
-    @patch('analytics_api.services.auth_service.twitter_request_call', new=AsyncMock(return_value={'status':'200', 'oauth_token':'abc', 'oauth_token_secret':'123'}))
+    @patch('analytics_api.services.auth_service.twitter_request_call', new=AsyncMock(return_value={'status':200, 'oauth_token':'abc', 'oauth_token_secret':'123'}))
     async def test_obtain_twitter_request_token_pass(self,client):
         #Successful Request
         with client:
@@ -58,7 +58,7 @@ class TestClassAuthorization():
         assert response == {'status_code': 400, 'status_message':"ERROR"}
 
     @pytest.mark.asyncio
-    @patch('analytics_api.services.auth_service.twitter_authorization_call', new=AsyncMock(return_value={'status':'200', 'auth_key':'def', 'auth_secret':'456', 'current_user':"Me", 'user_id':'abc123'}))
+    @patch('analytics_api.services.auth_service.twitter_authorization_call', new=AsyncMock(return_value={'status':200, 'auth_key':'def', 'auth_secret':'456', 'current_user':"Me", 'user_id':'abc123'}))
     async def test_obtain_twitter_access_token_pass(self, client):
         #Succesful Authorization
         with client:

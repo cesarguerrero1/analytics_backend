@@ -55,7 +55,7 @@ class TestCallbackClass:
         with client.session_transaction() as session:
             session['oauth_token'] = "abc123" #Setting up a session variable
             session['oauth_token_secret'] = '?'
-        response = client.get('/callback?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
+        response = client.get('/callback/twitter?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
         assert response.data == b'{"current_user":"me","oauth_approved":true,"status_code":200,"status_message":"OK"}\n'
 
     @patch('analytics_api.services.auth_service.obtain_twitter_access_token', new=AsyncMock(return_value={"status_code": 401, "status_message": "Unauthorized"}))
@@ -64,7 +64,7 @@ class TestCallbackClass:
             #Setting up session variables
             session['oauth_token'] = "abc123" 
             session['oauth_token_secret'] = '?'
-        response = client.get('/callback?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
+        response = client.get('/callback/twitter?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
         assert response.data == b'{"current_user":null,"oauth_approved":false,"status_code":401,"status_message":"Unauthorized"}\n'
 
     @patch('analytics_api.services.auth_service.obtain_twitter_access_token', new=AsyncMock())
@@ -73,7 +73,7 @@ class TestCallbackClass:
             #Setting up session variables
             session['oauth_token'] = "abc123"
             session['oauth_token_secret'] = '?'
-        response = client.get('/callback?oauth_token=%s&oauth_verifier=%s' %("abc124", "789xyz"))
+        response = client.get('/callback/twitter?oauth_token=%s&oauth_verifier=%s' %("abc124", "789xyz"))
         assert response.data == b'{"current_user":null,"oauth_approved":false,"status_code":401,"status_message":"Unauthorized"}\n' #Mismatch of tokens even though we have a good response
 
 

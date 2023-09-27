@@ -3,6 +3,7 @@ Cesar Guerrero
 08/31/23
 
 This is to setup your test environment in PyTest
+Running tests involves -- coverage run -m pytest -vs | -vv 
 '''
 import pytest
 from analytics_api import create_app
