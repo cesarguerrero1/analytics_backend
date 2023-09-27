@@ -7,7 +7,6 @@ Testing our Base Authorization Controller
 
 import pytest
 from flask import session
-from unittest.mock import AsyncMock, patch
 
 #Testing Various Profile Route Options
 class TestProfileClass:

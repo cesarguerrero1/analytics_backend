@@ -27,7 +27,7 @@ async def obtain_twitter_request_token():
     session['twitter_oauth_token'] = response['oauth_token']
     session['twitter_oauth_token_secret'] = response['oauth_token_secret']
 
-    return jsonify({"status_code": 200, 'status_message': "OK", 'oauth_ready': True, 'oauth_token': session['twitter_oauth_token']})
+    return jsonify({"status_code": 200, "status_message": "OK", "oauth_ready": True, "oauth_token": session['twitter_oauth_token']})
 
 #This method completes the last leg of the identification process
 async def obtain_twitter_access_token(oauth_verifier, session_token, session_secret):
@@ -45,7 +45,7 @@ async def obtain_twitter_access_token(oauth_verifier, session_token, session_sec
     session['is_logged_in'] = True
     session['app'] = "Twitter"
 
-    return jsonify({'oauth_approved': True, "status_code": 200, 'status_message': "OK"})
+    return jsonify({"oauth_approved": True, "status_code": 200, "status_message": "OK"})
     
 
 ################## Helper Function ################## 
@@ -55,9 +55,7 @@ async def twitter_request_call():
     endpoint_url = 'https://api.twitter.com/oauth/request_token'
     #Oauth Library used to help OAuth1 Flow
     oauth = OAuth1(os.getenv("TWITTER_API_KEY"), client_secret=os.getenv("TWITTER_API_SECRET"), callback_uri=os.getenv("TWITTER_CALLBACK_URI"))
-
     response = requests.get(url=endpoint_url, auth=oauth)
-
     #Respond with our new object
     response_object = {}
     response_object['status_code'] = response.status_code

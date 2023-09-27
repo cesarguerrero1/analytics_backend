@@ -6,7 +6,6 @@ Testing our Twitch Authorization Controller
 '''
 
 import pytest
-from flask import session
 from unittest.mock import AsyncMock, patch
 
 #Testing our 'Login with Twitch' Route
