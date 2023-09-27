@@ -59,25 +59,3 @@ class TestCallbackClass:
             session['twitter_oauth_token_secret'] = "456def"
         response = client.get('/callback/twitter?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
         assert response.data == b''
-
-'''
-#Testing the Callback Route
-class TestCallbackClass:
-    
-    @patch('analytics_api.services.auth_service.obtain_twitter_access_token', new=AsyncMock(return_value={"status_code": 200, "status_message":"OK", "current_user": 'me'}))
-    def test_callback_good_response(self,client):
-        with client.session_transaction() as session:
-            session['oauth_token'] = "abc123" #Setting up a session variable
-            session['oauth_token_secret'] = '?'
-        response = client.get('/callback/twitter?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
-        assert response.data == b'{"current_user":"me","oauth_approved":true,"status_code":200,"status_message":"OK"}\n'
-
-    @patch('analytics_api.services.auth_service.obtain_twitter_access_token', new=AsyncMock(return_value={"status_code": 401, "status_message": "Unauthorized"}))
-    def test_callback_bad_response(self,client):
-        with client.session_transaction() as session:
-            #Setting up session variables
-            session['oauth_token'] = "abc123" 
-            session['oauth_token_secret'] = '?'
-        response = client.get('/callback/twitter?oauth_token=%s&oauth_verifier=%s' %("abc123", "789xyz"))
-        assert response.data == b'{"current_user":null,"oauth_approved":false,"status_code":401,"status_message":"Unauthorized"}\n'
-'''
