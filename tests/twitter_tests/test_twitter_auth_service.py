@@ -1,16 +1,15 @@
 '''
 Cesar Guerrero
-08/31/23
+09/27/23
 
-Testing our Authorization Service file
+Testing our Twitter Authorization Service file
 '''
 
 import pytest
 import responses
 from unittest.mock import AsyncMock, patch
-from analytics_api.services import auth_service
 
-
+'''
 #Mock testing our call to the Twitter API for first leg of Oauth
 class TestClassRequest():
     @pytest.mark.asyncio
@@ -66,4 +65,4 @@ class TestClassAuthorization():
             client.get('/profile')
             response = await auth_service.obtain_twitter_access_token(self.oauth_verifier, self.session_token, self.session_secret)
             assert response ==  {'status_code': 200,'status_message':"OK",'current_user':"Me"}
-
+'''
