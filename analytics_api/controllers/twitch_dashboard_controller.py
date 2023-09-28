@@ -30,7 +30,7 @@ async def dashboard_bits_data():
 async def dashboard_followers_data():
     twitch_id = request.args.get('id')
     if twitch_id == None:
-        return Response("Bad Request", status=400)
+        return Response("Unauthorized", status=401)
     
     response = await twitch_dashboard_service.getTwitchFollowersData(twitch_id, session['twitch_access_token'], os.getenv("TWITCH_API_KEY"))
     return response
@@ -40,7 +40,7 @@ async def dashboard_followers_data():
 async def dashboard_subscribers_data():
     twitch_id = request.args.get('id')
     if twitch_id == None:
-        return Response("Bad Request", status=400)
+        return Response("Unauthorized", status=401)
 
     response = await twitch_dashboard_service.getTwitchSubscriberData(twitch_id, session['twitch_access_token'], os.getenv("TWITCH_API_KEY"))
     return response
@@ -50,7 +50,7 @@ async def dashboard_subscribers_data():
 async def dashboard_video_data():
     twitch_id = request.args.get('id')
     if twitch_id == None:
-        return Response("Bad Request", status=400)
+        return Response("Unauthorized", status=401)
     
     response = await twitch_dashboard_service.getTwitchVideoData(twitch_id, session['twitch_access_token'], os.getenv("TWITCH_API_KEY"))
     return response

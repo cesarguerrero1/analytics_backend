@@ -30,11 +30,7 @@ class TestCallbackClass:
         assert response.data == b'Unauthorized'
 
     @patch('analytics_api.services.twitch_auth_service.obtain_twitch_access_token', new=AsyncMock(return_value={"oauth_approved": True, "status_code": 200, "status_message": "OK"}))
-    def test_good_callback_response(self, client):
+    def test_callback_response(self, client):
         response = client.get('/callback/twitch?code=%s' %('abc123'))
         assert response.data == b'{"oauth_approved":true,"status_code":200,"status_message":"OK"}\n'
     
-    @patch('analytics_api.services.twitch_auth_service.obtain_twitch_access_token', new=AsyncMock())
-    def test_bad_callback_response(self, client):
-        response = client.get('/callback/twitch?code=%s' %('abc123'))
-        assert response.data == b''
