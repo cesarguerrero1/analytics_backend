@@ -2,7 +2,7 @@
 Cesar Guerrero
 09/19/23
 
-The Twitter Dashboard Controller is what will be handling all of the HTTP Endpoints once a user has been authorized.
+The Twitch Dashboard Controller is what will be handling all of the HTTP Endpoints once a user has been authorized.
 
 '''
 

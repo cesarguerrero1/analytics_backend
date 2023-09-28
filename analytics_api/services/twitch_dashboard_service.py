@@ -2,7 +2,7 @@
 Cesar Guerrero
 08/24/23
 
-The Dashboard Service is how we interact with the Twitter API for Dashboard service.
+The Twitch Dashboard Service is how we interact with the Twitch API for Dashboard services.
 We will be curating all the data here before returning it to the controller.
 
 '''

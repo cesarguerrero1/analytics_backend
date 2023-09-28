@@ -2,7 +2,7 @@
 Cesar Guerrero
 09/17/23
 
-This controller will handle any authentication needs with Pinterest
+This controller will handle any authentication needs with Twitch
 
 '''
 
