@@ -21,10 +21,8 @@ async def getTwitterUserData(auth_key, auth_secret):
     
     if response['status_code'] != 200:
         return Response("ERROR", status=response['status_code'])
-    else:
-        #Recall that our response object has all the pertinent data
-        response['status_message'] = "OK"
-        return jsonify(response)
+    
+    return jsonify(response)
 
 
 ######################## Helper Functions ########################
@@ -47,10 +45,9 @@ async def twitter_user_data_call(auth_key, auth_secret):
     response_object = {}
     response_object['status_code'] = response.status_code
     if response_object['status_code'] == 200:
-
+        response_object['status_message'] = "OK"
         #Parse our response
         dictionary = json.loads(response.text)['data']
-        
         response_object['created_at'] = dictionary['created_at'][0:10]
         response_object['followers_count'] = dictionary['public_metrics']['followers_count']
         response_object['following_count'] = dictionary['public_metrics']['following_count']
