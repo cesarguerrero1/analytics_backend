@@ -2,7 +2,7 @@
 Cesar Guerrero
 08/24/23
 
-The Twitter Dashboard Service is how we interact with the Twitter API for Dashboard services.
+The Twitter Dashboard Service is how we interact with the Twitter API for Dashboard services
 We will be curating all the data here before returning it to the controller.
 
 '''
@@ -50,14 +50,16 @@ async def twitter_user_data_call(auth_key, auth_secret):
 
         #Parse our response
         dictionary = json.loads(response.text)['data']
-        response_object['username'] = dictionary['username']
-        response_object['profile_image_url'] = dictionary['profile_image_url']
+        
+        response_object['created_at'] = dictionary['created_at'][0:10]
         response_object['followers_count'] = dictionary['public_metrics']['followers_count']
         response_object['following_count'] = dictionary['public_metrics']['following_count']
+        response_object['profile_image_url'] = dictionary['profile_image_url']
         response_object['tweet_count'] = dictionary['public_metrics']['tweet_count']
-        response_object['created_at'] = dictionary['created_at'][0:10]
+        response_object['username'] = dictionary['username']
 
         #Save the username and Id as session variables
         session['twitter_username'] =  dictionary['username']
         session['twitter_id'] = dictionary['id']
+
     return response_object
