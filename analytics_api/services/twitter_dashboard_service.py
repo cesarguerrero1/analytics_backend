@@ -16,26 +16,8 @@ from requests_oauthlib import OAuth1
 async def getTwitterUserData(auth_key, auth_secret):
     try:
         response = await twitter_user_data_call(auth_key, auth_secret)
-        
-        response_object = {}
-        if response['status_code'] == 200:
-            response_object['status_code'] = 200
-            response_object['status_message'] = "OK"
-
-            response_object['created_at'] = response["payload"]['created_at'][0:10]
-            response_object['followers_count'] = response["payload"]['public_metrics']['followers_count']
-            response_object['following_count'] = response["payload"]['public_metrics']['following_count']
-            response_object['profile_image_url'] = response["payload"]['profile_image_url']
-            response_object['tweet_count'] = response["payload"]['public_metrics']['tweet_count']
-            response_object['username'] = response["payload"]['username']
-
-            #Save the username and Id as session variables
-            session['twitter_username'] =  response["payload"]['username']
-            session['twitter_id'] = response["payload"]['id']
-
-            return jsonify(response_object)
-        else:
-            return Response("ERROR", status=response['status_code'])
+    
+        return response
 
     except:
         return Response("Bad Request", status=400)
@@ -56,17 +38,24 @@ async def twitter_user_data_call(auth_key, auth_secret):
     )
 
     response = requests.get(url=endpoint_url, params=params, auth=oauth)
-    
-    #Respond with our new object
-    response_object = {}
 
+    response_object = {}
     if response.status_code == 200:
         response_object['status_code'] = 200
+        response_object['status_message'] = "OK"
 
-        #Parse our response
-        response_object["payload"] = json.loads(response.text)['data']
-        
+        dictionary = json.loads(response.text)['data']
+        response_object['created_at'] = dictionary['created_at'][0:10]
+        response_object['followers_count'] = dictionary['public_metrics']['followers_count']
+        response_object['following_count'] = dictionary['public_metrics']['following_count']
+        response_object['profile_image_url'] = dictionary['profile_image_url']
+        response_object['tweet_count'] = dictionary['public_metrics']['tweet_count']
+        response_object['username'] = dictionary['username']
+
+        #Save the username and Id as session variables
+        session['twitter_username'] =  dictionary['username']
+        session['twitter_id'] = dictionary['id']
+
+        return jsonify(response_object)
     else:
-        response_object['status_code'] = response.status_code
-
-    return response
+        return Response("ERROR", status=response.status_code)
