@@ -13,9 +13,9 @@ from flask import (json, session, Response, jsonify)
 from requests_oauthlib import OAuth1
 
 #This method will call our helper function to get the Twitter Paylaod and then parse it as needed
-def getTwitterUserData(auth_key, auth_secret):
+async def getTwitterUserData(auth_key, auth_secret):
     try:
-        response = twitter_user_data_call(auth_key, auth_secret)
+        response = await twitter_user_data_call(auth_key, auth_secret)
     except:
         return Response("Bad Request", status=400)
     
@@ -36,9 +36,9 @@ def twitter_user_data_call(auth_key, auth_secret):
     }
 
     oauth = OAuth1(os.getenv("TWITTER_API_KEY"), client_secret=os.getenv("TWITTER_API_SECRET"),
-                   resource_owner_key=auth_key, resource_owner_secret=auth_secret,
-            )
-    
+            resource_owner_key=auth_key, resource_owner_secret=auth_secret,
+    )
+
     response = requests.get(url=endpoint_url, params=params, auth=oauth)
 
     #Respond with our new object
@@ -46,6 +46,7 @@ def twitter_user_data_call(auth_key, auth_secret):
     response_object['status_code'] = response.status_code
     if response_object['status_code'] == 200:
         response_object['status_message'] = "OK"
+
         #Parse our response
         dictionary = json.loads(response.text)['data']
         response_object['created_at'] = dictionary['created_at'][0:10]
