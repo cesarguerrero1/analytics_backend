@@ -32,7 +32,6 @@ async def twitter_user_data_call(auth_key, auth_secret):
     params = {
         "user.fields": "created_at,profile_image_url,public_metrics"
     }
-
     #Checking to see if we can just circumnavigate this in testing
     if current_app.config['TESTING'] == True:
         response = requests.get(url=endpoint_url, params=params)
