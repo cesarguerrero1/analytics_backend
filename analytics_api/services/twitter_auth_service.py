@@ -17,7 +17,6 @@ from requests_oauthlib import OAuth1
 async def obtain_twitter_request_token():
     try:
         response = await twitter_request_call()
-        print(response)
         #Respond with our new object
         if response['status_code'] == 200:
             #Store our Ouath 1st-leg Values
