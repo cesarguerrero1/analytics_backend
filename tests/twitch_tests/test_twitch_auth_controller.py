@@ -9,9 +9,9 @@ import pytest
 from unittest.mock import AsyncMock, patch
 
 #Testing our 'Login with Twitch' Route
-class TestLoginClass:
+class TestTwitchLoginClass:
 
-    def test_login_response(self,client, monkeypatch):
+    def test_twitch_login_response(self,client, monkeypatch):
         monkeypatch.setenv("TWITCH_API_KEY",'abc')
 
         #You should not be able to call login with anything other than GET
@@ -22,7 +22,7 @@ class TestLoginClass:
         response = client.get('/login/twitch')
         assert response.data == b'{"client_id":"abc","oauth_ready":true,"status_code":200,"status_message":"OK"}\n'
 
-class TestCallbackClass:
+class TestTwitchCallbackClass:
 
     def test_null_code_callback(self, client):
         response = client.get('/callback/twitch')
@@ -30,7 +30,7 @@ class TestCallbackClass:
         assert response.data == b'Unauthorized'
 
     @patch('analytics_api.services.twitch_auth_service.obtain_twitch_access_token', new=AsyncMock(return_value={"oauth_approved": True, "status_code": 200, "status_message": "OK"}))
-    def test_callback_response(self, client):
+    def test_twitch_callback_response(self, client):
         response = client.get('/callback/twitch?code=%s' %('abc123'))
         assert response.data == b'{"oauth_approved":true,"status_code":200,"status_message":"OK"}\n'
     
