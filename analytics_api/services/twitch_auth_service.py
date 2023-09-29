@@ -27,7 +27,7 @@ async def obtain_twitch_access_token(code):
     session['twitch_refresh_token'] = response['refresh_token']
     session['is_logged_in'] = True
     session['app'] = "Twitch"
-
+    
     return jsonify({"oauth_approved": True, "status_code": 200, "status_message": "OK"})
 
 
