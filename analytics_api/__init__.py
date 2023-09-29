@@ -12,9 +12,9 @@ from flask_session import Session
 from flask_cors import CORS
 
 #Controllers
-from .controllers import (auth_controller, dashboard_controller)
+from .controllers import (auth_controller, twitter_dashboard_controller, twitter_auth_controller, twitch_dashboard_controller, twitch_auth_controller)
 
-#We are creating our Flask Server
+#We are creating our Flask Server - If no environment is found just assume we are testing
 def create_app(environment = "TESTING"):
     app = Flask(__name__)
 
@@ -23,13 +23,16 @@ def create_app(environment = "TESTING"):
 
     #Register all of our controllers
     app.register_blueprint(auth_controller.bp)
-    app.register_blueprint(dashboard_controller.bp)
+    app.register_blueprint(twitter_auth_controller.bp)
+    app.register_blueprint(twitch_dashboard_controller.bp)
+    app.register_blueprint(twitter_dashboard_controller.bp)
+    app.register_blueprint(twitch_auth_controller.bp)
+    
 
     return app
 
 #Create a different factory based on our instance type
 def factory(factoryInstanceType, app):
-
     if factoryInstanceType == "TESTING":
         app.config.from_mapping(
             SECRET_KEY='test',
@@ -59,7 +62,8 @@ def factory(factoryInstanceType, app):
                 SESSION_REDIS=redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT")),
                 SESSION_COOKIE_HTTPONLY=False
             )
+
+        #Activate Sessions and CORS
         Session(app)
-         #Activate Sessions and CORS
         CORS(app, origins=[os.getenv("FRONT_END_URL")], supports_credentials=True)
     return 

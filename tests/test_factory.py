@@ -11,6 +11,7 @@ from analytics_api import create_app
 
 #Testing different configurations
 def test_config(monkeypatch):
+    #Monkeypatch is used to simulate our enivornmental variables storage
     monkeypatch.setenv("SECRET_KEY",'abc')
 
     #Production Build
