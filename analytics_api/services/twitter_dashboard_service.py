@@ -13,9 +13,9 @@ from flask import (json, session, Response, jsonify)
 from requests_oauthlib import OAuth1
 
 #This method will call our helper function to get the Twitter Paylaod and then parse it as needed
-async def getTwitterUserData(auth_key, auth_secret):
+def getTwitterUserData(auth_key, auth_secret):
     try:
-        response = await twitter_user_data_call(auth_key, auth_secret)
+        response = twitter_user_data_call(auth_key, auth_secret)
     except:
         return Response("Bad Request", status=400)
     
@@ -28,7 +28,7 @@ async def getTwitterUserData(auth_key, auth_secret):
 ######################## Helper Functions ########################
 
 #Helper function to directly ping Twitter API to get User Payload
-async def twitter_user_data_call(auth_key, auth_secret):
+def twitter_user_data_call(auth_key, auth_secret):
     endpoint_url = 'https://api.twitter.com/2/users/me'
 
     params = {
