@@ -24,15 +24,13 @@ class TestClassAuthorization:
         )
 
         with client:
-            with client.session_transaction() as session:
-                client.get('/profile')
+            client.get('/profile')
             response = await twitch_auth_service.obtain_twitch_access_token("code123")
             assert session['twitch_access_token'] == 'access123'
             assert session['twitch_refresh_token'] == 'ref123'
             assert session['is_logged_in'] == True
             assert session['app'] == "Twitch"
             assert response.data == b'{"oauth_approved":true,"status_code":200,"status_message":"OK"}\n'
-            yield client
 
     @pytest.mark.asyncio
     @responses.activate
