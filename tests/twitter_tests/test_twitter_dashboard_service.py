@@ -12,7 +12,7 @@ import responses
 from flask import session
 from analytics_api.services import twitter_dashboard_service
 
-class TestClassGetTwitterUser():
+class TestClassGetTwitterUser:
 
     @pytest.mark.asyncio
     @responses.activate
@@ -47,7 +47,7 @@ class TestClassGetTwitterUser():
 
     @pytest.mark.asyncio
     @responses.activate
-    async def test_get_twitter_user_fail(self, client):
+    async def test_get_twitter_user_fail(self):
         #Mock our Twitter API call
         responses.get(
             url = 'https://api.twitter.com/2/users/me',
@@ -60,7 +60,7 @@ class TestClassGetTwitterUser():
 
     @pytest.mark.asyncio
     @responses.activate
-    async def test_get_twitter_user_error(self, client):
+    async def test_get_twitter_user_error(self):
         #Mock our Twitter API call
         responses.get(
             url = 'https://api.twitter.com/2/users/me',

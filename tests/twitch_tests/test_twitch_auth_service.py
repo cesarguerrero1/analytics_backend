@@ -10,7 +10,7 @@ from flask import session
 from analytics_api.services import twitch_auth_service
 
 
-class TestClassAuthorization():
+class TestClassAuthorization:
 
     @pytest.mark.asyncio
     @responses.activate

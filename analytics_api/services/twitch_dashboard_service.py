@@ -19,27 +19,26 @@ async def getTwitchUserData(access_token, client_id):
 
         async with httpx.AsyncClient() as client:
             response = await client.get("https://api.twitch.tv/helix/users", headers=header)
+        
+        #Hanlde our response!
+        response_object = {}
+        response_object['status_code'] = response.status_code
+        if response_object['status_code'] == 200:
+            response_object['status_message'] = "OK"
+            #Parse Response
+            payload = response.json()['data'][0]
+            response_object['created_at'] = payload['created_at'][0:10]
+            response_object['profile_image_url'] = payload['profile_image_url']
+            response_object['twitch_id'] = payload['id']
+            response_object['username'] = payload['display_name']
+
+            #Save the id and username as session variables
+            session['twitch_id'] = payload['id']
+            session['twitch_username'] = payload['display_name']
+        else:
+            return Response("ERROR", status=response.status_code)
     except:
         return Response("Bad Request", status=400)
-    
-    response_object = {}
-    response_object['status_code'] = response.status_code
-
-    if response_object['status_code'] == 200:
-        response_object['status_message'] = "OK"
-
-        #Parse Response
-        payload = response.json()['data'][0]
-        response_object['created_at'] = payload['created_at'][0:10]
-        response_object['profile_image_url'] = payload['profile_image_url']
-        response_object['twitch_id'] = payload['id']
-        response_object['username'] = payload['display_name']
-
-        #Save the id and username as session variables
-        session['twitch_id'] = payload['id']
-        session['twitch_username'] = payload['display_name']
-    else:
-        return Response("ERROR", status=response['status_code'])
 
     return jsonify(response_object)
 
@@ -50,61 +49,66 @@ async def getTwitchBitsData(access_token, client_id):
             "Authorization": "Bearer %s" %access_token,
             "Client-Id": client_id
         }
+
         async with httpx.AsyncClient() as client:
             #By default this will return the top 10 people who have given Bits to the stream
             response = await client.get("https://api.twitch.tv/helix/bits/leaderboard", headers=header)
+
+        response_object = {}
+        response_object['status_code'] = response.status_code
+
+        if response_object['status_code'] == 200:
+            response_object['status_message'] = "OK"
+
+            #Parse Response
+            data_array = response.json()['data']
+            if(len(data_array) > 0):
+                #We only care about the score
+                rank_array = []
+                for item in data_array:
+                    rank_array.append([item['user_name'], item['score']])
+                response_object['bits_array'] = rank_array
+            else:
+                #This will just be an empty array
+                response_object['bits_array'] = data_array       
+        else:
+            return Response("ERROR", status=response.status_code)
+        
     except:
         return Response("Bad Request", status=400)
-
-    response_object = {}
-    response_object['status_code'] = response.status_code
-    if response_object['status_code'] == 200:
-        response_object['status_message'] = "OK"
-
-        #Parse Response
-        data_array = response.json()['data']
-        if(len(data_array) > 0):
-            #We only care about the score
-            rank_array = []
-            for item in data_array:
-                rank_array.append([item['user_name'], item['score']])
-            response_object['bits_array'] = rank_array
-        else:
-            #This will just be an empty array
-            response_object['bits_array'] = data_array
-            
-    else:
-        return Response("ERROR", status=response['status_code'])
 
     return jsonify(response_object)
 
 #Call the Twitch API to get our Followers Payload
 async def getTwitchFollowersData(broadcaster_id, access_token, client_id):
     try:
-        params = {
+        params= {
             'broadcaster_id': broadcaster_id
         }
 
-        header = {
+        headers = {
             "Authorization": "Bearer %s" %access_token,
             "Client-Id": client_id
         }
 
         async with httpx.AsyncClient() as client:
-            response = await client.get("https://api.twitch.tv/helix/channels/followers", params=params, headers=header)
+            response = await client.get("https://api.twitch.tv/helix/channels/followers", headers=headers, params=params)
+        
+        response_object = {}
+        response_object['status_code'] = response.status_code
+
+        if response_object['status_code'] == 200:
+            response_object['status_message'] = "OK"
+
+            #Parse Response
+            payload = response.json()
+            response_object['followers'] = payload['total'] 
+        else:
+            return Response("ERROR", status=response.status_code)
+        
     except:
         return Response("Bad Request", status=400)
 
-    response_object = {}
-    response_object['status_code'] = response.status_code
-    if response_object['status_code'] == 200:
-        response_object['status_message'] = "OK"
-
-        #Parse Response
-        payload = response.json()
-        response_object['followers'] = payload['total'] 
-    else:
-        return Response("ERROR", status=response['status_code'])
     return jsonify(response_object)
 
 #Call the Twitch API to get our Subscribers Payload
@@ -155,48 +159,55 @@ async def getTwitchSubscriberData(broadcaster_id, access_token, client_id):
                         response = await client.get("https://api.twitch.tv/helix/subscriptions", params=params, headers=header)
                         payload = response.json()
             else:
-                return Response("ERROR", status=response['status_code'])
+                return Response("ERROR", status=response.status_code)
+            
     except:
         return Response("Bad Request", status=400)
+    
     return jsonify(response_object)
 
 #Call the Twitch API to get our Video Payload
 async def getTwitchVideoData(broadcaster_id, access_token, client_id):
     try:
         params = {
-            'user_id': broadcaster_id,
-            'type': 'archive',
             'first': '100',
+            'type': 'archive',
+            'user_id': broadcaster_id
         }
 
-        header = {
+        headers = {
             "Authorization": "Bearer %s" %access_token,
             "Client-Id": client_id
         }
 
         async with httpx.AsyncClient() as client:
-            response = await client.get("https://api.twitch.tv/helix/videos", params=params, headers=header)
+            response = await client.get("https://api.twitch.tv/helix/videos", headers=headers, params=params)
+
+        response_object = {}
+        response_object['status_code'] = response.status_code
+
+        if response_object['status_code'] == 200:
+            response_object['status_message'] = "OK"
+
+            payload = response.json()
+
+            #We only care about the first 10 videos so no need to paginate
+            video_array = payload['data']
+            if(len(video_array) > 0 ):
+                #We only care about the score
+                rank_array = []
+                for video in video_array:
+                    #The order will be from most recent to oldest
+                    rank_array.append([video['view_count'], video['duration']])
+                response_object['video_array'] = rank_array
+            else:
+                #This will be an empty array
+                response_object['video_array'] = video_array
+
+        else:
+            return Response("ERROR", status=response.status_code)
+
     except:
         return Response("Bad Request", status=400)
     
-    response_object = {}
-    response_object['status_code'] = response.status_code
-    if response_object['status_code'] == 200:
-        response_object['status_message'] = "OK"
-        payload = response.json()
-
-        #We only care about the first 10 videos so no need to paginate
-        video_array = payload['data']
-        if(len(video_array) > 0 ):
-            #We only care about the score
-            rank_array = []
-            for video in video_array:
-                #The order will be from most recent to oldest
-                rank_array.append([video['view_count'], video['duration']])
-            response_object['video_array'] = rank_array
-        else:
-            #This will be an empty array
-            response_object['video_array'] = video_array
-    else:
-        return Response("ERROR", status=response['status_code'])
     return jsonify(response_object)

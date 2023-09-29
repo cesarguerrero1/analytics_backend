@@ -9,7 +9,7 @@ import responses
 from flask import session
 from analytics_api.services import twitter_auth_service
 
-class TestClassRequest():
+class TestClassRequest:
 
     @pytest.mark.asyncio
     @responses.activate
@@ -60,7 +60,7 @@ class TestClassRequest():
         assert response.data == b'Bad Request'
 
 
-class TestClassAuthorization():
+class TestClassAuthorization:
 
     @pytest.mark.asyncio
     @responses.activate
