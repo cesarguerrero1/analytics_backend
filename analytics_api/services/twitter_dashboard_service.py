@@ -37,8 +37,8 @@ async def twitter_user_data_call(auth_key, auth_secret):
             resource_owner_key=auth_key, resource_owner_secret=auth_secret,
     )
 
-    response = requests.get(url=endpoint_url, params=params, auth=oauth)
 
+    response = requests.get(url=endpoint_url, params=params, auth=oauth)
     response_object = {}
     if response.status_code == 200:
         response_object['status_code'] = 200

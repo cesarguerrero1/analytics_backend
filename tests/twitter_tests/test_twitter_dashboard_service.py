@@ -9,21 +9,19 @@ Testing our Twitter Dashboard Service
 
 import pytest
 import responses
-import requests_oauthlib
 from flask import session
+from unittest.mock import Mock,AsyncMock, patch
 from analytics_api.services import twitter_dashboard_service
 
 class TestClassGetTwitterUser:
 
     @pytest.mark.asyncio
     @responses.activate
-    async def test_get_twitter_user_success(self, client, monkeypatch):
-        #We need to mock the Oauth Library function we are using
-        monkeypatch.setattr("requests_oauthlib.oauth1_auth.OAuth1", lambda: "auth_string")
+    async def test_get_twitter_user_success(self, client):
 
         #Mock our Twitter API call
         responses.get(
-            url = 'https://api.twitter.com/2/users/me',
+            url = 'https://api.twitter.com/2/users/me?user.fields=created_at,profile_image_url,public_metrics',
             json =  {"data":
                         {
                             "id":"123123",
