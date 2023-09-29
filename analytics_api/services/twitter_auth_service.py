@@ -58,7 +58,7 @@ async def twitter_request_call():
     oauth = OAuth1(os.getenv("TWITTER_API_KEY"), client_secret=os.getenv("TWITTER_API_SECRET"), callback_uri=os.getenv("TWITTER_CALLBACK_URI"))
 
     response = requests.get(url=endpoint_url, auth=oauth)
-    print(response.text)
+    
     #Respond with our new object
     response_object = {}
     response_object['status_code'] = response.status_code
