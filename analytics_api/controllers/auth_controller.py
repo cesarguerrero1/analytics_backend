@@ -33,5 +33,4 @@ def is_logged_in(logged_in):
         #A session does not exist for the given user
         session['is_logged_in'] = False
         session['app'] = None
-
         return jsonify({'status_code': 200, 'status_message': "OK", "is_logged_in": False, "app": None})

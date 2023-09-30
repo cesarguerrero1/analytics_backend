@@ -8,12 +8,12 @@ Design Patterns: Factory, Decorator
 ## Plan:
 1. As a base I want to make sure that a single file Flask App will deploy onto Heroku.
 2. Once that is verified I will build my file structure and ensure that all of my pages are returning "dummy" data via POSTMAN API calls
-3. I will then start connecting my application to Twitter and there will be two major themes:
-    a. First, I will be making sure that I can appropriately authorize my personal account via this website
+3. I will then start connecting my application to Twitter/Twitch and there will be two major themes:
+    a. First, I will be making sure that I can appropriately authorize my personal account via thei website
     b. Second, I will be making sure that once I am authorized I can pull analytical data from the site and return it. Again this will be verified with POSTMAN.
 4. As I work on those themes I will be using the PyTest and Coverage libraries to unit test our entire application.
     a. In conjunction with the unit tests, I will be using Github Actions to establish a CI/CD pipeline between my application and the Heroku Server where my application is being deployed
-4. Once the above is all verified I will be connecting my application to the frontend and handling all of the appropriate routing.
+5. In the future I will be interacting with the Redis Database to do more than just host the session. I will be adding a persistent element of recording "Contact Us" form submissions.
 
 
 ## How to Install Locally

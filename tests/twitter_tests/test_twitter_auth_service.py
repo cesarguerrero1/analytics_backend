@@ -5,11 +5,6 @@ Cesar Guerrero
 Testing our Twitter Authorization Service file
 '''
 
-'''
-Cesar Guerrero
-09/27/23
-Testing our Twitter Authorization Service file
-'''
 import pytest
 import responses
 from flask import session
