@@ -147,7 +147,7 @@ async def getTwitchSubscriberData(broadcaster_id, access_token, client_id):
                             response_object['subscriber_tiers_array'][0] += 1
                         elif(subscriber['tier'] == '2000'):
                              response_object['subscriber_tiers_array'][1] += 1
-                        else:
+                        elif(subscriber['tier'] == '3000'):
                              response_object['subscriber_tiers_array'][2] += 1
                     #Now we need to see if there is another page
                     cursor = payload['pagination'].get("cursor", None)
@@ -196,9 +196,16 @@ async def getTwitchVideoData(broadcaster_id, access_token, client_id):
             if(len(video_array) > 0 ):
                 #We only care about the score
                 rank_array = []
+
+                #we need to break after 25 videos
+                count = 0
                 for video in video_array:
                     #The order will be from most recent to oldest
                     rank_array.append([video['view_count'], video['duration']])
+                    count += 1
+                    if(count == 25):
+                        break
+
                 response_object['video_array'] = rank_array
             else:
                 #This will be an empty array
