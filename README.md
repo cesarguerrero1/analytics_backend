@@ -5,6 +5,7 @@ This repository contains all of the files needed to run the backend for the Anal
 
 The purpose of the Analytics website is to showcase an Oauth1 and Oauth2 workflow for Twitter and Twitch, respectively. The user will be able to perform a "single-click" authentication process with their login information from either of those websites. Upon successful login, a dashboard containing metrics pertaining to either Twitter or Twitch for the user will be displayed using appropriate charts and graphs.
 
+Website Link: https://resplendent-mousse-173f05.netlify.app/dashboard
 
 ## Architecture & Design Ideas
 The architecture and design ideas are as follows:
