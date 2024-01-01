@@ -40,6 +40,7 @@ async def obtain_twitter_access_token(oauth_verifier, session_token, session_sec
 async def twitter_request_call():
     endpoint_url = 'https://api.twitter.com/oauth/request_token'
     
+    #Recall that we are doing this check for test mode so we can remove the need to call/mock OAuth1
     if current_app.config['TESTING'] == True:
         response = requests.get(url=endpoint_url)
     else:

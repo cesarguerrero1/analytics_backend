@@ -28,5 +28,5 @@ def test_config(monkeypatch):
 
     #Testing Build
     test_app = create_app("TESTING")
-    assert test_app.secret_key =='test'
+    assert test_app.secret_key == 'test'
     assert test_app.testing
